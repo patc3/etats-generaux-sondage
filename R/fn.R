@@ -2,7 +2,11 @@
 library(tidyverse)
 library(gentleman)
 library(openxlsx)
-
+library(tidytext)
+library(dplyr)
+library(stopwords)
+library(wordcloud)
+library(RColorBrewer)
 
 
 #### helpers ####
@@ -14,13 +18,24 @@ tab<-\(...)table(...,useNA="always")
 #### vars ####
 CPATH<-"files/recode.xlsx"
 RPATH<-"files/results.xlsx"
+DPATH<-"data/États+généraux+(VDR)_24+novembre+2025_13.30.sav"
 
+
+VARS<-list(
+  txt=c("defis_recherche_"%p%1:3,
+        "enjeux_"%p%1:3,
+        "idees",
+        "commentaire"),
+  num=c("defis_financement_"%p%1:6,
+        "enjeux_interdis",
+        "interet_1")
+)
 
 
 #### load data ####
 load_data<-function()
 {
-  
+  haven::read_spss(DPATH)
 }
 
 
