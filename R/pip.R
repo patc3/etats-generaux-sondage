@@ -8,7 +8,8 @@ df<-load_data()
 
 
 #### data prep ####
-df<-df |> filter(ResponseId!="R_62EVZu8bNfOI8Mu") # empty submission
+empty_submissions<-c("R_62EVZu8bNfOI8Mu","R_1IeHLCoHrVAp7sl")
+df<-df |> filter(!ResponseId%in%empty_submissions)
 df$interet_1<-df$interet_1-1
 
 ##### combine text vars ####
@@ -30,13 +31,14 @@ stop_fr <- data.frame(word = stopwords("fr", source = "stopwords-iso"))
 stop_add<-c("recherche")
 
 # choose var
-v<-c("enjeux","defis","idees","commentaire")[2] # toggle
+v<-c("defis","enjeux","idees","commentaire")[1] # toggle
 
 # Tokenize and remove stop words
 (word_freq <- df |> 
   unnest_tokens("word", v) |> 
   anti_join(rbind(stop_fr,stop_add), by = "word") |> 
   count(word, sort = TRUE))
+word_freq |> copy()
 
 # Create word cloud
 wordcloud(words = word_freq$word,
